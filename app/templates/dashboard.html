@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+
+    <!-- INDUSTRY VIEW: Create Project -->
+    {% if role == 'Industry' %}
+    <div class="card">
+        <h2>Post a New Project</h2>
+        <form method="POST" action="{{ url_for('main.create_project') }}">
+            <div class="form-group">
+                <label>Project Title:</label>
+                <input type="text" name="title" required>
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea name="description" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn">Post Project</button>
+        </form>
+    </div>
+
+    <!-- STUDENT VIEW: List Projects -->
+    {% elif role == 'Student' or role == 'Faculty' %}
+    <h1>Available Projects</h1>
+    <div class="project-list">
+        {% for project in projects %}
+        <!-- Note: project is a DB Row. project[1] is Title, project[2] is Desc, project[4] is CompanyName -->
+        <!-- Ideally, we access by index if it's a tuple, or by name if using Row objects.
+             Assuming tuple from previous DAO code: (ID, Title, Desc, Status, CompanyName) -->
+        <div class="card project-card">
+            <h3>{{ project[1] }}</h3>
+            <small>Posted by: <strong>{{ project[4] }}</strong> | Status: {{ project[3] }}</small>
+            <p>{{ project[2] }}</p>
+            <button class="btn-small">Apply (Coming Soon)</button>
+        </div>
+        {% else %}
+        <p>No projects available yet.</p>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}
