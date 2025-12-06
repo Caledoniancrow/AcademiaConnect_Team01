@@ -1,7 +1,9 @@
-from app.controllers.auth_routes import auth_bp
-from app.controllers.main_routes import main_bp
+from flask import Blueprint
+
+
+auth_bp = Blueprint('auth', __name__)
+main_bp = Blueprint('main', __name__)
 
 
 
-app.register_blueprint(auth_bp)
-app.register_blueprint(main_bp)
+from . import auth_routes, main_routes
