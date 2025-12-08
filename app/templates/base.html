@@ -13,12 +13,12 @@
         <div class="logo">Academia Connect</div>
         <ul>
             {% if session.get('user_id') %}
-            <li><span>Welcome, {{ session.get('username') }} ({{ session.get('role') }})</span></li>
-            <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
-            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                <li><span>Welcome, {{ session.get('username') }} ({{ session.get('role') }})</span></li>
+                <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
             {% else %}
-            <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-            <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                <li><a href="{{ url_for('auth.register') }}">Register</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -26,11 +26,11 @@
     <!-- Flash Messages (Errors/Success) -->
     <div class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert {{ category }}">{{ message }}</div>
-        {% endfor %}
-        {% en   dif %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
 
         <!-- Unique Page Content Goes Here -->
