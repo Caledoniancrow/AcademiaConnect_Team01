@@ -14,7 +14,7 @@ class UserDAO:
                 VALUES (?, ?, ?, ?)
             """
             cursor.execute(query, (username, email, password_hash, role))
-            conn.commit()
+
             return True
         except Exception as e:
             print(f"[DB Error] create_user(): {e}")

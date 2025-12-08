@@ -7,12 +7,12 @@ class ProjectDAO:
         conn = get_db()
         cursor = conn.cursor()
         try:
+
             query = """
                 INSERT INTO Projects (Title, Description, Status, IndustryID)
                 VALUES (?, ?, 'Open', ?)
             """
             cursor.execute(query, (title, description, industry_id))
-            conn.commit()
             return True
         except Exception as e:
             print(f"[DB Error] create_project(): {e}")
@@ -23,6 +23,7 @@ class ProjectDAO:
         conn = get_db()
         cursor = conn.cursor()
         try:
+
             query = """
                 SELECT 
                     p.ProjectID,
