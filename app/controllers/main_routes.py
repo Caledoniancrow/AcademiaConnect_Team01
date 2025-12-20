@@ -16,6 +16,50 @@ def dashboard():
     
 
     
+    =
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     if user_role == 'Student' or user_role == 'Faculty':
         projects_list = ProjectDAO.get_all_projects()
         
