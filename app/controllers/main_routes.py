@@ -15,11 +15,15 @@ def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
     
-        user_role = session.get('role')
-        projects_list = []
-     if user_role == 'Student' or user_role == 'Faculty':
+    user_role = session.get('role')
+    projects_list = []
+    
+
+    if user_role == 'Student' or user_role == 'Faculty':
         projects_list = ProjectDAO.get_all_projects()
-        return render_template('dashboard.html', projects=projects_list, role=user_role)
+        
+
+    return render_template('dashboard.html', projects=projects_list, role=user_role)
 
 @main_bp.route('/create_project', methods=['POST'])
 def create_project():
