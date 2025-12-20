@@ -1,2 +1,5 @@
 flask
 pyodbc
+pytest
+pytest-flask
+pytest-mock

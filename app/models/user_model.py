@@ -10,7 +10,7 @@ class UserDAO:
         try:
             password_hash = hashlib.sha256(password.encode()).hexdigest()
             query = """
-                INSERT INTO Users (Username, Email, PasswordHash, Role)
+                INSERT INTO Users (Use rname, Email, PasswordHash, Role)
                 VALUES (?, ?, ?, ?)
             """
             cursor.execute(query, (username, email, password_hash, role))
