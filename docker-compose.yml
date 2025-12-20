@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      # This tells the app we are inside Docker
+      - FLASK_ENV=production
+      - IN_DOCKER=True
+    extra_hosts:
+      # This magical line allows Docker to see your Windows Machine
+      - "host.docker.internal:host-gateway"
