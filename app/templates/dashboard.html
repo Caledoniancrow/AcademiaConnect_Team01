@@ -1,45 +1,144 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="dashboard">
-
-    <!-- INDUSTRY VIEW: Create Project -->
-    {% if role == 'Industry' %}
-    <div class="card">
-        <h2>Post a New Project</h2>
-        <form method="POST" action="{{ url_for('main.create_project') }}">
-            <div class="form-group">
-                <label>Project Title:</label>
-                <input type="text" name="title" required>
+        <div id="dashboard" class="page-content">
+            <div class="dashboard-header">
+                <h1>Welcome back, Student!</h1>
+                <p>Here's what's happening with your projects</p>
             </div>
-            <div class="form-group">
-                <label>Description:</label>
-                <textarea name="description" rows="4" required></textarea>
-            </div>
-            <button type="submit" class="btn">Post Project</button>
-        </form>
-    </div>
 
-    <!-- STUDENT VIEW: List Projects -->
-    {% elif role == 'Student' or role == 'Faculty' %}
-    <h1>Available Projects</h1>
-    <div class="project-list">
-        {% for project in projects %}
-        <!-- Note: project is a DB Row. project[1] is Title, project[2] is Desc, project[4] is CompanyName -->
-        <!-- Ideally, we access by index if it's a tuple, or by name if using Row objects.
-             Assuming tuple from previous DAO code: (ID, Title, Desc, Status, CompanyName) -->
-        <div class="card project-card">
-            <h3>{{ project[1] }}</h3>
-            <small>Posted by: <strong>{{ project[4] }}</strong> | Status: {{ project[3] }}</small>
-            <p>{{ project[2] }}</p>
-            <button class="btn-small">Apply (Coming Soon)</button>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(102, 126, 234, 0.1); color: var(--primary);">📁</div>
+                    </div>
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Active Projects</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(67, 233, 123, 0.1); color: var(--success);">✓</div>
+                    </div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Completed Milestones</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(255, 161, 23, 0.1); color: var(--warning);">⏱</div>
+                    </div>
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Pending Tasks</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(79, 172, 254, 0.1); color: var(--info);">👥</div>
+                    </div>
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Team Members</div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h2 style="margin-bottom: 1rem; color: var(--dark);">My Applications</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Team</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>AI Healthcare Platform</td>
+                            <td>Tech Innovators</td>
+                            <td><span class="status-badge open">Pending Faculty</span></td>
+                            <td>Dec 15, 2024</td>
+                            <td><button class="btn btn-primary btn-small">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>Smart City IoT Network</td>
+                            <td>Code Wizards</td>
+                            <td><span class="status-badge completed">Approved</span></td>
+                            <td>Dec 10, 2024</td>
+                            <td><button class="btn btn-primary btn-small">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>E-Commerce Analytics</td>
+                            <td>Data Minds</td>
+                            <td><span class="status-badge in-progress">In Progress</span></td>
+                            <td>Dec 18, 2024</td>
+                            <td><button class="btn btn-primary btn-small">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        {% else %}
-        <p>No projects available yet.</p>
-        {% endfor %}
-    </div>
 
-    {% endif %}
+        <!-- PROJECTS PAGE -->
+        <div id="projects" class="page-content">
+            <div class="page-header">
+                <h1>Available Projects</h1>
+                <button class="btn btn-primary">Filter Projects</button>
+            </div>
 
-</div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>AI Healthcare Platform</h3>
+                        <span class="status-badge open">Open</span>
+                    </div>
+                    <p class="project-company">🏢 MedTech Corp</p>
+                    <p class="project-description">Develop an AI-powered patient diagnosis system using machine learning algorithms to improve healthcare outcomes.</p>
+                    <div class="project-footer">
+                        <span class="project-funding">💰 $5,000</span>
+                        <button class="btn btn-primary btn-small">Apply Now</button>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Smart City IoT Network</h3>
+                        <span class="status-badge open">Open</span>
+                    </div>
+                    <p class="project-company">🏢 UrbanTech</p>
+                    <p class="project-description">Build IoT infrastructure for urban management including traffic monitoring and environmental sensors.</p>
+                    <div class="project-footer">
+                        <span class="project-funding">💰 $7,000</span>
+                        <button class="btn btn-primary btn-small">Apply Now</button>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>E-Commerce Analytics</h3>
+                        <span class="status-badge in-progress">In Progress</span>
+                    </div>
+                    <p class="project-company">🏢 DataFlow Inc</p>
+                    <p class="project-description">Create real-time analytics dashboard for e-commerce platforms with predictive insights.</p>
+                    <div class="project-footer">
+                        <span class="project-funding">💰 $4,500</span>
+                        <button class="btn btn-primary btn-small">View Details</button>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Blockchain Supply Chain</h3>
+                        <span class="status-badge open">Open</span>
+                    </div>
+                    <p class="project-company">🏢 ChainLogix</p>
+                    <p class="project-description">Implement blockchain-based tracking system for supply chain transparency and security.</p>
+                    <div class="project-footer">
+                        <span class="project-funding">💰 $8,000</span>
+                        <button class="btn btn-primary btn-small">Apply Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 {% endblock %}

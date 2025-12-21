@@ -10,6 +10,7 @@ class Config:
     # Example: 'DESKTOP-558\SQLEXPRESS' or 'localhost'
     SQL_SERVER = 'YOUR_SERVER_NAME_HERE' 
     SQL_DATABASE = 'AcademiaConnectDB'
+    #localhost
     
     # 3. CONNECTION STRING
     # 'Trusted_Connection=yes' means it uses your Windows Login (No password needed)
