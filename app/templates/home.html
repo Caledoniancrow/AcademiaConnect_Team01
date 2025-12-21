@@ -1,53 +1,52 @@
 {% extends "base.html" %}
+
+{% block title %}Home - Academia Connect{% endblock %}
+
 {% block content %}
+<div class="hero-section">
+    <h1>Bridge Academia & Industry</h1>
+    <p>Connecting Students, Faculty, and Industry Partners for Collaborative Innovation</p>
+    <div class="hero-buttons">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started →</a>
+        <a href="#features" class="btn btn-outline">Learn More</a>
+    </div>
+</div>
 
-<div id="home" class="page-content active">
-            <div class="hero-section">
-                <h1>Bridge Academia & Industry</h1>
-                <p>Connecting Students, Faculty, and Industry Partners for Collaborative Innovation</p>
-                <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="showPage('login')">Get Started →</button>
-                    <button class="btn btn-outline" style="background: rgba(255,255,255,0.2); color: white; border-color: white;">Learn More</button>
-                </div>
-            </div>
+<div id="features" class="role-cards">
+    <div class="role-card">
+        <div class="role-card-icon">👨‍🎓</div>
+        <h3>Students</h3>
+        <p>Form teams and work on real-world industry projects</p>
+        <ul class="role-features">
+            <li>Create & join teams</li>
+            <li>Apply to projects</li>
+            <li>Track milestones</li>
+            <li>Build your portfolio</li>
+        </ul>
+    </div>
 
-            <div class="role-cards">
-                <div class="role-card">
-                    <div class="role-card-icon">👨‍🎓</div>
-                    <h3>Students</h3>
-                    <p>Form teams and work on real-world industry projects</p>
-                    <ul class="role-features">
-                        <li>Create & join teams</li>
-                        <li>Apply to projects</li>
-                        <li>Track milestones</li>
-                        <li>Build your portfolio</li>
-                    </ul>
-                </div>
+    <div class="role-card">
+        <div class="role-card-icon">👨‍🏫</div>
+        <h3>Faculty</h3>
+        <p>Supervise student teams and mentor projects</p>
+        <ul class="role-features">
+            <li>Review applications</li>
+            <li>Supervise teams</li>
+            <li>Grade milestones</li>
+            <li>Foster innovation</li>
+        </ul>
+    </div>
 
-                <div class="role-card">
-                    <div class="role-card-icon">👨‍🏫</div>
-                    <h3>Faculty</h3>
-                    <p>Supervise student teams and mentor projects</p>
-                    <ul class="role-features">
-                        <li>Review applications</li>
-                        <li>Supervise teams</li>
-                        <li>Grade milestones</li>
-                        <li>Foster innovation</li>
-                    </ul>
-                </div>
-
-                <div class="role-card">
-                    <div class="role-card-icon">🏢</div>
-                    <h3>Industry</h3>
-                    <p>Post projects and collaborate with academic talent</p>
-                    <ul class="role-features">
-                        <li>Post project proposals</li>
-                        <li>Review applications</li>
-                        <li>Monitor progress</li>
-                        <li>Access fresh talent</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
+    <div class="role-card">
+        <div class="role-card-icon">🏢</div>
+        <h3>Industry</h3>
+        <p>Post projects and collaborate with academic talent</p>
+        <ul class="role-features">
+            <li>Post project proposals</li>
+            <li>Review applications</li>
+            <li>Monitor progress</li>
+            <li>Access fresh talent</li>
+        </ul>
+    </div>
+</div>
 {% endblock %}

@@ -3,764 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academia Connect - MVC Structure Demo</title>
-    <style>
-        /* ==================== BASE STYLES ==================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --success: #43e97b;
-            --danger: #f44336;
-            --warning: #ffa117;
-            --info: #4facfe;
-            --light: #f8f9fa;
-            --dark: #333;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* ==================== CENTERED NAVIGATION ==================== */
-        .navbar {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 3rem;
-            z-index: 1000;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            white-space: nowrap;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: 100%;
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        /* ==================== BUTTONS ==================== */
-        .btn {
-            padding: 0.6rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-small {
-            padding: 0.4rem 1rem;
-            font-size: 0.85rem;
-        }
-
-        .btn-full {
-            width: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* ==================== CONTAINER ==================== */
-        .container {
-            max-width: 1200px;
-            margin: 100px auto 50px;
-            padding: 0 2rem;
-        }
-
-        /* ==================== PAGE SELECTOR (FOR DEMO) ==================== */
-        .page-selector {
-            background: white;
-            padding: 1rem 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .page-selector h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-
-        .page-selector button {
-            margin: 0.5rem;
-        }
-
-        /* ==================== FLASH MESSAGES ==================== */
-        .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .alert.success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 4px solid var(--success);
-        }
-
-        .alert.danger {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid var(--danger);
-        }
-
-        .alert.warning {
-            background: #fff3cd;
-            color: #856404;
-            border-left: 4px solid var(--warning);
-        }
-
-        /* ==================== PAGES CONTAINER ==================== */
-        .page-content {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .page-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ==================== HOME PAGE ==================== */
-        .hero-section {
-            text-align: center;
-            color: white;
-            padding: 4rem 0;
-        }
-
-        .hero-section h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero-section p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        .role-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .role-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-        }
-
-        .role-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .role-card-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .role-card h3 {
-            color: var(--dark);
-            margin-bottom: 1rem;
-        }
-
-        .role-card p {
-            color: #666;
-            margin-bottom: 1rem;
-        }
-
-        .role-features {
-            list-style: none;
-            text-align: left;
-        }
-
-        .role-features li {
-            padding: 0.5rem 0;
-            color: #666;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .role-features li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--success);
-            font-weight: bold;
-        }
-
-        /* ==================== AUTH PAGES ==================== */
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: calc(100vh - 100px);
-        }
-
-        .auth-box {
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 450px;
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .auth-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            color: white;
-            font-size: 2rem;
-        }
-
-        .auth-header h2 {
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .auth-header p {
-            color: #666;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .link:hover {
-            text-decoration: underline;
-        }
-
-        .auth-divider {
-            text-align: center;
-            margin: 1.5rem 0;
-            position: relative;
-        }
-
-        .auth-divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #e0e0e0;
-        }
-
-        .auth-divider span {
-            background: white;
-            padding: 0 1rem;
-            color: #666;
-            position: relative;
-        }
-
-        .social-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn-social {
-            flex: 1;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            background: white;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .btn-social:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .auth-footer {
-            text-align: center;
-            color: #666;
-        }
-
-        /* ==================== DASHBOARD ==================== */
-        .dashboard-header {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            margin-bottom: 2rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .dashboard-header h1 {
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .dashboard-header p {
-            color: #666;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--dark);
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* ==================== PROJECTS ==================== */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            background: white;
-            padding: 1.5rem 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .page-header h1 {
-            color: var(--dark);
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .project-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .project-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .project-header h3 {
-            color: var(--dark);
-            flex: 1;
-        }
-
-        .status-badge {
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .status-badge.open {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-badge.in-progress {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-badge.completed {
-            background: #cce5ff;
-            color: #004085;
-        }
-
-        .project-company {
-            color: #666;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .project-description {
-            color: #666;
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-
-        .project-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 1rem;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .project-funding {
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        /* ==================== TEAMS ==================== */
-        .teams-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .team-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-        }
-
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .team-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .team-card h3 {
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .team-leader,
-        .team-members {
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .team-project {
-            background: var(--light);
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            font-size: 0.9rem;
-        }
-
-        /* ==================== APPLICATIONS TABLE ==================== */
-        .table-container {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-        }
-
-        th {
-            background: var(--light);
-            color: var(--dark);
-            font-weight: 600;
-        }
-
-        tr {
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        tr:hover {
-            background: var(--light);
-        }
-
-        /* ==================== RESPONSIVE ==================== */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 1rem;
-                width: 90%;
-                padding: 1rem;
-            }
-
-            .nav-links {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .hero-section h1 {
-                font-size: 2rem;
-            }
-
-            .page-header {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .projects-grid,
-            .teams-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <title>{% block title %}Academia Connect{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-
-    <!-- CENTERED NAVIGATION BAR -->
+    <!-- Navigation Bar -->
     <nav class="navbar">
-        <div class="logo">🎓 Academia Connect</div>
+        <div class="logo">
+            🎓 Academia Connect
+        </div>
+
+        <!-- Dynamic Navigation Links Based on Login Status -->
         <ul class="nav-links">
-            <li><a href="#" onclick="showPage('home')" class="active">Home</a></li>
-            <li><a href="#" onclick="showPage('projects')">Projects</a></li>
-            <li><a href="#" onclick="showPage('teams')">Teams</a></li>
-            <li><a href="#" onclick="showPage('dashboard')">Dashboard</a></li>
+            {% if session.get('user_id') %}
+                <!-- Links visible when logged in -->
+                <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                
+                {% if session.get('role') == 'Student' %}
+                    <li><a href="{{ url_for('application_bp.create_team') }}">Create Team</a></li>
+                    <li><a href="{{ url_for('application_bp.view_my_status') }}">My Applications</a></li>
+                {% endif %}
+                
+                {% if session.get('role') == 'Faculty' %}
+                    <li><a href="{{ url_for('application_bp.faculty_dashboard') }}">Review Applications</a></li>
+                {% endif %}
+                
+                {% if session.get('role') == 'Industry' %}
+                    <li><a href="{{ url_for('main.dashboard') }}">My Projects</a></li>
+                {% endif %}
+                
+                {% if session.get('role') == 'Admin' %}
+                    <li><a href="#">Admin Panel</a></li>
+                    <li><a href="#">Manage Users</a></li>
+                {% endif %}
+            {% else %}
+                <!-- Links visible when not logged in -->
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            {% endif %}
         </ul>
+
+        <!-- User Actions (Login/Logout) -->
         <div class="nav-actions">
-            <button class="btn btn-outline btn-small" onclick="showPage('login')">Login</button>
-            <button class="btn btn-primary btn-small" onclick="showPage('register')">Sign Up</button>
+            {% if session.get('user_id') %}
+                <div class="user-info">
+                    <span>Hello, <strong>{{ session.get('username') }}</strong></span>
+                    <span class="user-role-badge role-{{ session.get('role')|lower }}">
+                        {{ session.get('role') }}
+                    </span>
+                </div>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline btn-sm">Logout</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline btn-sm">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Sign Up</a>
+            {% endif %}
         </div>
     </nav>
 
-     <script>
-        // Page navigation function
-        function showPage(pageName) {
-            // Hide all pages
-            const pages = document.querySelectorAll('.page-content');
-            pages.forEach(page => page.classList.remove('active'));
-            
-            // Show selected page
-            const selectedPage = document.getElementById(pageName);
-            if (selectedPage) {
-                selectedPage.classList.add('active');
-            }
-            
-            // Update nav links
-            const navLinks = document.querySelectorAll('.nav-links a');
-            navLinks.forEach(link => link.classList.remove('active'));
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    <!-- Flash Messages -->
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <span>
+                            {% if category == 'success' %}✓{% endif %}
+                            {% if category == 'danger' %}✗{% endif %}
+                            {% if category == 'warning' %}⚠{% endif %}
+                            {% if category == 'info' %}ℹ{% endif %}
+                        </span>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.style.top = '10px';
-                navbar.style.padding = '0.6rem 1.5rem';
-            } else {
-                navbar.style.top = '20px';
-                navbar.style.padding = '0.8rem 2rem';
-            }
-        });
+        <!-- Main Content Area -->
+        {% block content %}{% endblock %}
+    </div>
 
-        // Simulate form submissions
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                alert('Form submitted! In your Flask app, this would POST to your routes.');
-            });
-        });
-    </script>
+    <!-- Footer (Optional) -->
+    {% block footer %}
+    <footer style="text-align: center; padding: 2rem; color: white; margin-top: 3rem;">
+        <p>&copy; 2025 Academia Connect - Team 01 | Zewail City</p>
+    </footer>
+    {% endblock %}
 
+    <!-- JavaScript -->
+    {% block scripts %}{% endblock %}
 </body>
 </html>

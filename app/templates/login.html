@@ -1,77 +1,50 @@
 {% extends "base.html" %}
-{% block content %}        
-        
-        <div id="login" class="page-content">
-            <div class="auth-container">
-                <div class="auth-box">
-                    <div class="auth-header">
-                        <div class="auth-icon">🔐</div>
-                        <h2>Welcome Back</h2>
-                        <p>Log in to continue your journey</p>
-                    </div>
 
-                    <form class="auth-form">
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" placeholder="your.email@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" placeholder="••••••••" required>
-                        </div>name: Academia Connect CI
+{% block title %}Login - Academia Connect{% endblock %}
 
-                        on:
-                        push:
-                        branches: [ "main" ]
-                        pull_request:
-                        branches: [ "main" ]
-                        workflow_dispatch:
-
-                        jobs:
-                        build:
-                        runs-on: ubuntu-latest
-
-                        steps:
-
-                        - uses: actions/checkout@v3
-
-                        - name: Set up Python 3.9
-                        uses: actions/setup-python@v3
-                        with:
-                        python-version: "3.9"
-
-                        - name: Install dependencies
-                        run: |
-                        python -m pip install --upgrade pip
-                        pip install flask pyodbc
-
-                        - name: Run Syntax Check (Compile)
-                        run: |
-                        python -m compileall app/
-                        <div class="form-options">
-                            <label class="checkbox-label">
-                                <input type="checkbox">
-                                <span>Remember me</span>
-                            </label>
-                            <a href="#" class="link">Forgot password?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-full" onclick="event.preventDefault(); showPage('dashboard');">Log In</button>
-                    </form>
-
-                    <div class="auth-divider">
-                        <span>or connect with</span>
-                    </div>
-
-                    <div class="social-buttons">
-                        <button class="btn-social">Facebook</button>
-                        <button class="btn-social">Google</button>
-                        <button class="btn-social">GitHub</button>
-                    </div>
-
-                    <p class="auth-footer">
-                        Don't have an account? <a href="#" onclick="showPage('register')" class="link">Sign Up</a>
-                    </p>
-                </div>
-            </div>
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box">
+        <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Login to continue your academic journey</p>
         </div>
+
+        <form action="{{ url_for('auth.login') }}" method="POST">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input 
+                    type="email" 
+                    id="email"
+                    name="email" 
+                    class="form-control"
+                    placeholder="your.email@example.com"
+                    required 
+                    autocomplete="email"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password"
+                    name="password" 
+                    class="form-control"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                Log In
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Sign Up</a></p>
+        </div>
+    </div>
+</div>
 {% endblock %}

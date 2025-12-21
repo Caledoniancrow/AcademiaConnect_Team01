@@ -1,47 +1,79 @@
 {% extends "base.html" %}
 
+{% block title %}Register - Academia Connect{% endblock %}
+
 {% block content %}
-        <div id="register" class="page-content">
-            <div class="auth-container">
-                <div class="auth-box">
-                    <div class="auth-header">
-                        <div class="auth-icon">📝</div>
-                        <h2>Create Account</h2>
-                        <p>Join our community today</p>
-                    </div>
-
-                    <form class="auth-form">
-                        <div class="form-group">
-                            <label>Full Name</label>
-                            <input type="text" placeholder="John Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" placeholder="your.email@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" placeholder="••••••••" required>
-                        </div>
-                        <div class="form-group">
-                            <label>I am a</label>
-                            <select>
-                                <option value="Student">Student</option>
-                                <option value="Faculty">Faculty</option>
-                                <option value="Industry">Industry Partner</option>
-                            </select>
-                        </div>
-                        <label class="checkbox-label" style="margin-bottom: 1.5rem;">
-                            <input type="checkbox" required>
-                            <span>I accept the Terms & Conditions</span>
-                        </label>
-                        <button type="submit" class="btn btn-primary btn-full" onclick="event.preventDefault(); showPage('dashboard');">Create Account</button>
-                    </form>
-
-                    <p class="auth-footer">
-                        Already have an account? <a href="#" onclick="showPage('login')" class="link">Log In</a>
-                    </p>
-                </div>
-            </div>
+<div class="auth-container">
+    <div class="auth-box">
+        <div class="auth-header">
+            <h2>Create Account</h2>
+            <p>Join the Academia Connect community</p>
         </div>
+
+        <form action="{{ url_for('auth.register') }}" method="POST">
+            <div class="form-group">
+                <label for="username">Full Name</label>
+                <input 
+                    type="text" 
+                    id="username"
+                    name="username" 
+                    class="form-control"
+                    placeholder="John Doe"
+                    required
+                    autocomplete="name"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input 
+                    type="email" 
+                    id="email"
+                    name="email" 
+                    class="form-control"
+                    placeholder="your.email@example.com"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password"
+                    name="password" 
+                    class="form-control"
+                    placeholder="Create a strong password"
+                    required
+                    autocomplete="new-password"
+                    minlength="6"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="role">I am a:</label>
+                <select 
+                    id="role"
+                    name="role" 
+                    class="form-control"
+                    required
+                >
+                    <option value="">Select your role</option>
+                    <option value="Student">Student</option>
+                    <option value="Faculty">Faculty Member</option>
+                    <option value="Industry">Industry Partner</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                Create Account
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{{ url_for('auth.login') }}">Log In</a></p>
+        </div>
+    </div>
+</div>
 {% endblock %}
