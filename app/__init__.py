@@ -18,13 +18,15 @@ def create_app():
     # We import these LOCALLY to avoid circular import errors
     from .controllers.auth_routes import auth_bp
     from .controllers.main_routes import main_bp
-    from .controllers.application_routes import application_bp  # <--- NEW
-    from .controllers.milestone_routes import milestone_bp      # <--- NEW
-    
+    from .controllers.application_routes import application_bp  
+    from .controllers.milestone_routes import milestone_bp      
+    from .controllers.admin_routes import admin_bp
+
     # --- REGISTER BLUEPRINTS ---
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
-    app.register_blueprint(application_bp)  # <--- Connects the Application/Faculty logic
-    app.register_blueprint(milestone_bp)    # <--- Connects the Grading/Milestone logic
+    app.register_blueprint(application_bp)  
+    app.register_blueprint(milestone_bp)    
+    app.register_blueprint(admin_bp)
 
     return app
