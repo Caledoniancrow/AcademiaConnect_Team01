@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}My Applications - Academia Connect{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>My Applications</h1>
+        <p>Track the status of your team's project applications.</p>
+    </div>
+
+    <div class="table-container">
+        {% if applications %}
+        <table>
+            <thead>
+                <tr>
+                    <th>App ID</th>
+                    <th>Team Name</th>
+                    <th>Project Title</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td>#{{ app[0] }}</td>
+                    <td>{{ app[3] }}</td> <td><strong>{{ app[1] }}</strong></td> <td>
+                        <span class="project-status 
+                            {% if 'Pending' in app[2] %}status-pending
+                            {% elif 'Approved' in app[2] %}status-approved
+                            {% elif 'Rejected' in app[2] %}status-rejected
+                            {% endif %}">
+                            {{ app[2] }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if 'Approved' in app[2] %}
+                            <a href="{{ url_for('milestone_bp.view_milestones', project_id=app[4]) }}" class="btn btn-sm btn-primary">View Work</a>
+                        {% else %}
+                            <span style="color: #6c757d;">--</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div style="text-align: center; padding: 2rem;">
+            <p>You haven't applied to any projects yet.</p>
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary">Browse Projects</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

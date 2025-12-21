@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Project Milestones - Academia Connect{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Project Milestones</h1>
+            <p>Manage deliverables and track progress</p>
+        </div>
+        <div>
+            <span class="user-role-badge role-{{ user_role|lower }}">{{ user_role }} View</span>
+        </div>
+    </div>
+
+    <div class="card">
+        {% if milestones %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Milestone</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                    <th>Submission</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in milestones %}
+                <tr>
+                    <td>
+                        <strong>{{ m[2] }}</strong><br>
+                        <small>{{ m[3] }}</small>
+                    </td>
+                    <td>{{ m[4] }}</td>
+                    <td>
+                        <span class="project-status 
+                            {% if m[5] == 'Completed' %}status-approved
+                            {% elif m[5] == 'Submitted' %}status-pending
+                            {% else %}status-open{% endif %}">
+                            {{ m[5] }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if m[6] %}
+                            <a href="{{ m[6] }}" target="_blank">View Submission 🔗</a>
+                        {% else %}
+                            <span style="color: #ccc;">No submission</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user_role == 'Student' and m[5] != 'Completed' %}
+                        <form action="{{ url_for('milestone_bp.submit_milestone') }}" method="POST" class="d-flex gap-1">
+                            <input type="hidden" name="milestone_id" value="{{ m[0] }}">
+                            <input type="text" name="submission_link" class="form-control" placeholder="Paste Link..." required>
+                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                        </form>
+                        
+                        {% elif user_role in ['Faculty', 'Industry'] and m[5] == 'Submitted' %}
+                        <form action="{{ url_for('milestone_bp.approve_milestone') }}" method="POST">
+                            <input type="hidden" name="milestone_id" value="{{ m[0] }}">
+                            <button type="submit" class="btn btn-sm btn-success">✓ Approve</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No milestones defined for this project yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

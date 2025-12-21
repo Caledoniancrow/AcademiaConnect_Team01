@@ -21,7 +21,7 @@
                 <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
                 
                 {% if session.get('role') == 'Student' %}
-                    <li><a href="{{ url_for('application_bp.create_team') }}">Create Team</a></li>
+                    <li><a href="{{ url_for('application_bp.view_teams') }}">My Teams</a></li>
                     <li><a href="{{ url_for('application_bp.view_my_status') }}">My Applications</a></li>
                 {% endif %}
                 
@@ -31,11 +31,11 @@
                 
                 {% if session.get('role') == 'Industry' %}
                     <li><a href="{{ url_for('main.dashboard') }}">My Projects</a></li>
+                    <li><a href="{{ url_for('application_bp.industry_dashboard') }}">Review Applications</a></li>
                 {% endif %}
                 
                 {% if session.get('role') == 'Admin' %}
-                    <li><a href="#">Admin Panel</a></li>
-                    <li><a href="#">Manage Users</a></li>
+                    <li><a href="{{ url_for('admin_bp.dashboard') }}">Admin Panel</a></li>
                 {% endif %}
             {% else %}
                 <!-- Links visible when not logged in -->

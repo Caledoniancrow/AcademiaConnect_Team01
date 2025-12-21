@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Faculty Dashboard - Academia Connect{% endblock %}
+{% block title %}Review Applications - Academia Connect{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="page-header">
         <div>
-            <h1>Faculty Dashboard</h1>
-            <p style="color: #6c757d; margin-top: 0.5rem;">Review and approve student applications</p>
+            <h1>Applications for Your Projects</h1>
+            <p style="color: #6c757d; margin-top: 0.5rem;">Review teams that have been approved by faculty</p>
         </div>
     </div>
 
     <div class="table-container">
-        <h3 style="margin-bottom: 1rem; color: var(--primary);">📋 Pending Applications</h3>
+        <h3 style="margin-bottom: 1rem; color: var(--primary);">📋 Faculty-Approved Applications</h3>
         
         {% if applications %}
         <table>
@@ -48,7 +48,7 @@
                                 <input type="hidden" name="application_id" value="{{ app[0] }}">
                                 
                                 <button type="submit" name="action" value="Approve" class="btn btn-success btn-sm">
-                                    ✓ Approve
+                                    ✓ Accept
                                 </button>
                             </form>
                             
@@ -68,7 +68,7 @@
         {% else %}
         <div style="text-align: center; padding: 3rem; color: #6c757d;">
             <p style="font-size: 1.2rem;">No pending applications at this time.</p>
-            <p>Applications from students will appear here for your review.</p>
+            <p>Faculty-approved applications will appear here for your final review.</p>
         </div>
         {% endif %}
     </div>

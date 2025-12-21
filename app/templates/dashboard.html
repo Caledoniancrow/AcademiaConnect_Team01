@@ -23,7 +23,7 @@
         {% if role == 'Industry' %}
         <a href="#create-project" class="btn btn-primary">+ New Project</a>
         {% elif role == 'Student' %}
-        <a href="{{ url_for('application_bp.create_team') }}" class="btn btn-primary">+ Create Team</a>
+        <a href="{{ url_for('application_bp.view_teams') }}" class="btn btn-primary">My Teams</a>
         {% endif %}
     </div>
 
@@ -81,7 +81,7 @@
             <div class="project-card">
                 <div class="project-header">
                     <h4 class="project-title">{{ project[1] }}</h4>
-                    <span class="project-status status-{{ project[3]|lower }}">
+                    <span class="project-status status-{{ project[3]|lower|replace(' ', '-') }}">
                         {{ project[3] }}
                     </span>
                 </div>
@@ -93,54 +93,29 @@
 
                 <p class="project-description">{{ project[2][:150] }}{% if project[2]|length > 150 %}...{% endif %}</p>
 
-                <!-- STUDENT-SPECIFIC: Application Form -->
-                {% if role == 'Student' and project[3] == 'Approved' %}
+                <!-- STUDENT-SPECIFIC: Show Apply Button -->
+                {% if role == 'Student' and project[3] == 'Open' %}
                 <div class="project-actions">
-                    <form action="{{ url_for('application_bp.apply_to_project') }}" method="POST">
-                        <input type="hidden" name="project_id" value="{{ project[0] }}">
-                        
-                        <div class="form-group">
-                            <label for="team_id_{{ project[0] }}">Your Team ID</label>
-                            <input 
-                                type="number" 
-                                id="team_id_{{ project[0] }}"
-                                name="team_id" 
-                                class="form-control"
-                                placeholder="Enter your team ID"
-                                required
-                            >
-                        </div>
-
-                        <div class="form-group">
-                            <label for="faculty_id_{{ project[0] }}">Faculty Supervisor ID</label>
-                            <input 
-                                type="number" 
-                                id="faculty_id_{{ project[0] }}"
-                                name="faculty_id" 
-                                class="form-control"
-                                placeholder="Enter faculty ID"
-                                required
-                            >
-                        </div>
-
-                        <div class="form-group">
-                            <label for="proposal_{{ project[0] }}">Why is your team a good fit?</label>
-                            <textarea 
-                                id="proposal_{{ project[0] }}"
-                                name="proposal" 
-                                class="form-control"
-                                placeholder="Explain your team's qualifications..."
-                                required
-                            ></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-full">Apply to Project</button>
-                    </form>
+                    <a href="{{ url_for('application_bp.apply_form', project_id=project[0]) }}" class="btn btn-primary btn-full">
+                        Apply to Project
+                    </a>
                 </div>
                 {% endif %}
 
-                <!-- FACULTY/INDUSTRY: View Only -->
-                {% if role in ['Faculty', 'Industry'] %}
+                <!-- INDUSTRY: Show Edit/Delete Options -->
+                {% if role == 'Industry' %}
+                <div class="project-actions">
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-outline" style="flex: 1;">View Details</button>
+                        <form action="{{ url_for('main.delete_project', project_id=project[0]) }}" method="POST" style="flex: 1;" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                            <button type="submit" class="btn btn-danger btn-full">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- FACULTY/ADMIN: View Only -->
+                {% if role in ['Faculty', 'Admin'] %}
                 <div class="project-actions">
                     <button class="btn btn-outline btn-full">View Details</button>
                 </div>
@@ -162,7 +137,7 @@
             <div class="card-header">
                 <h3 class="card-title">👥 User Management</h3>
             </div>
-            <a href="#" class="btn btn-primary btn-full">Manage Users</a>
+            <a href="{{ url_for('admin_bp.dashboard') }}" class="btn btn-primary btn-full">Manage Users</a>
         </div>
 
         <div class="card">

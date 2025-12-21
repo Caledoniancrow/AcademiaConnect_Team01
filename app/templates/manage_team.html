@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Team - Academia Connect{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>{{ team[1] }}</h1>
+            <p style="color: #6c757d; margin-top: 0.5rem;">
+                Leader: {{ team[3] }}
+                {% if is_leader %}
+                <span class="user-role-badge role-admin" style="margin-left: 0.5rem;">You</span>
+                {% endif %}
+            </p>
+        </div>
+        <a href="{{ url_for('application_bp.view_teams') }}" class="btn btn-outline">← Back to Teams</a>
+    </div>
+
+    <!-- Add Member Section (Only for Leader) -->
+    {% if is_leader %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">➕ Add Team Member</h3>
+            <p class="card-subtitle">Search by student email address</p>
+        </div>
+
+        <form action="{{ url_for('application_bp.add_team_member', team_id=team[0]) }}" method="POST">
+            <div class="form-group">
+                <label for="email">Student Email</label>
+                <input 
+                    type="email" 
+                    id="email"
+                    name="email" 
+                    class="form-control"
+                    placeholder="student@example.com"
+                    required
+                >
+                <small style="color: #6c757d; display: block; margin-top: 0.5rem;">
+                    Enter the email address of the student you want to add
+                </small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Member</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Team Members List -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">👥 Team Members ({{ members|length }})</h3>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        {% if is_leader %}
+                        <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td><strong>{{ member[1] }}</strong></td>
+                        <td>{{ member[2] }}</td>
+                        <td>
+                            {% if member[0] == team[2] %}
+                                <span class="user-role-badge role-admin">Leader</span>
+                            {% else %}
+                                <span class="user-role-badge role-student">Member</span>
+                            {% endif %}
+                        </td>
+                        {% if is_leader %}
+                        <td>
+                            {% if member[0] != team[2] %}
+                            <form action="{{ url_for('application_bp.remove_team_member', team_id=team[0], student_id=member[0]) }}" method="POST" style="display: inline;">
+                                <button 
+                                    type="submit" 
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to remove this member?')"
+                                >
+                                    Remove
+                                </button>
+                            </form>
+                            {% else %}
+                            <span style="color: #ccc;">—</span>
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

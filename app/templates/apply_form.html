@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Apply to Project - Academia Connect{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Apply to Project</h1>
+            <p style="color: #6c757d; margin-top: 0.5rem;">{{ project[1] }}</p>
+        </div>
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline">← Back</a>
+    </div>
+
+    <!-- Project Details -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">🚀 Project Information</h3>
+        </div>
+        <div style="margin-top: 1rem;">
+            <p><strong>Company:</strong> {{ project[4] }}</p>
+            <p style="margin-top: 0.5rem;"><strong>Description:</strong></p>
+            <p style="color: #666; margin-top: 0.5rem;">{{ project[2] }}</p>
+        </div>
+    </div>
+
+    <!-- Application Form -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📝 Submit Your Application</h3>
+            <p class="card-subtitle">Fill in the details below to apply</p>
+        </div>
+
+        <form action="{{ url_for('application_bp.apply_to_project') }}" method="POST">
+            <input type="hidden" name="project_id" value="{{ project[0] }}">
+
+            <!-- Team Selection -->
+            <div class="form-group">
+                <label for="team_id">Select Your Team</label>
+                <select id="team_id" name="team_id" class="form-control" required>
+                    <option value="">-- Choose a team --</option>
+                    {% for team in teams %}
+                    <option value="{{ team[0] }}">{{ team[1] }} ({{ team_member_counts.get(team[0], 0) }} members)</option>
+                    {% endfor %}
+                </select>
+                <small style="color: #6c757d; display: block; margin-top: 0.5rem;">
+                    Don't have a team? <a href="{{ url_for('application_bp.create_team') }}">Create one here</a>
+                </small>
+            </div>
+
+            <!-- Faculty Supervisor -->
+            <div class="form-group">
+                <label for="faculty_id">Faculty Supervisor ID</label>
+                <input 
+                    type="number" 
+                    id="faculty_id"
+                    name="faculty_id" 
+                    class="form-control"
+                    placeholder="Enter faculty supervisor ID"
+                    required
+                >
+                <small style="color: #6c757d; display: block; margin-top: 0.5rem;">
+                    Contact your faculty supervisor to get their ID
+                </small>
+            </div>
+
+            <!-- Team Statement -->
+            <div class="form-group">
+                <label for="proposal">Why is your team a good fit?</label>
+                <textarea 
+                    id="proposal"
+                    name="proposal" 
+                    class="form-control"
+                    placeholder="Explain your team's qualifications, relevant experience, and why you're interested in this project..."
+                    rows="6"
+                    required
+                ></textarea>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">Submit Application</button>
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline" style="flex: 1; text-align: center; line-height: 2.5;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

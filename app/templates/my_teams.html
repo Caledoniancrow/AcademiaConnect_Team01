@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}My Teams - Academia Connect{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>My Teams</h1>
+            <p style="color: #6c757d; margin-top: 0.5rem;">Manage your student teams</p>
+        </div>
+        <a href="{{ url_for('application_bp.create_team') }}" class="btn btn-primary">+ Create New Team</a>
+    </div>
+
+    {% if teams %}
+    <div class="grid grid-2">
+        {% for team in teams %}
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ team[1] }}</h3>
+                {% if team[2] == session.get('user_id') %}
+                <span class="user-role-badge role-admin">Team Leader</span>
+                {% else %}
+                <span class="user-role-badge role-student">Member</span>
+                {% endif %}
+            </div>
+
+            <p style="margin: 1rem 0;">
+                <strong>Leader:</strong> {{ team[3] }}
+            </p>
+
+            <div class="project-actions">
+                {% if team[2] == session.get('user_id') %}
+                <div style="display: flex; gap: 0.5rem;">
+                    <a href="{{ url_for('application_bp.manage_team', team_id=team[0]) }}" class="btn btn-primary" style="flex: 1;">
+                        Manage Team
+                    </a>
+                    <form action="{{ url_for('application_bp.delete_team', team_id=team[0]) }}" method="POST" style="flex: 1;" onsubmit="return confirm('Are you sure you want to delete this team? This action cannot be undone.');">
+                        <button type="submit" class="btn btn-danger btn-full">Delete Team</button>
+                    </form>
+                </div>
+                {% else %}
+                <a href="{{ url_for('application_bp.manage_team', team_id=team[0]) }}" class="btn btn-outline btn-full">
+                    View Team
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card text-center" style="padding: 3rem;">
+        <p style="font-size: 1.2rem; color: #6c757d; margin-bottom: 1.5rem;">
+            You are not part of any team yet.
+        </p>
+        <a href="{{ url_for('application_bp.create_team') }}" class="btn btn-primary">Create Your First Team</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

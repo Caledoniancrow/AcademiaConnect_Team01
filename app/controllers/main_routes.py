@@ -5,10 +5,6 @@ from app.models.project_model import ProjectDAO
 
 @main_bp.route('/')
 def index():
-    """
-    Landing page - shows home.html if not logged in
-    Redirects to dashboard if already logged in
-    """
     if 'user_id' in session:
         return redirect(url_for('main.dashboard'))
     
@@ -26,8 +22,11 @@ def dashboard():
     user_role = session.get('role')
     projects_list = []
     
-    # Fetch projects based on role
-    if user_role in ['Student', 'Faculty', 'Industry']:
+    if user_role == 'Industry':
+        # Shows ONLY projects created by this Industry Partner
+        projects_list = ProjectDAO.get_projects_by_industry(session['user_id'])
+    elif user_role in ['Student', 'Faculty']:
+        # Shows ALL projects
         projects_list = ProjectDAO.get_all_projects()
     
     return render_template('dashboard.html', projects=projects_list, role=user_role)
@@ -35,9 +34,6 @@ def dashboard():
 
 @main_bp.route('/create_project', methods=['POST'])
 def create_project():
-    """
-    Industry partners can create new projects
-    """
     if 'user_id' not in session:
         flash('You must be logged in to create a project', 'danger')
         return redirect(url_for('auth.login'))
@@ -57,8 +53,30 @@ def create_project():
     success = ProjectDAO.create_project(title, description, industry_id)
     
     if success:
-        flash('Project submitted successfully! It will be reviewed by administrators.', 'success')
+        flash('Project created successfully!', 'success')
     else:
         flash('Failed to create project. Please try again.', 'danger')
+    
+    return redirect(url_for('main.dashboard'))
+
+
+@main_bp.route('/projects/<int:project_id>/delete', methods=['POST'])
+def delete_project(project_id):
+    """Delete a project (only owner can delete)"""
+    if 'user_id' not in session:
+        flash('You must be logged in', 'danger')
+        return redirect(url_for('auth.login'))
+    
+    if session.get('role') != 'Industry':
+        flash('Only Industry partners can delete projects', 'danger')
+        return redirect(url_for('main.dashboard'))
+    
+    industry_id = session['user_id']
+    result = ProjectDAO.delete_project(project_id, industry_id)
+    
+    if result == "Success":
+        flash('Project deleted successfully!', 'success')
+    else:
+        flash(result, 'danger')
     
     return redirect(url_for('main.dashboard'))

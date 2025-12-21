@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Application Details - Academia Connect{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Application Details</h1>
+            <p style="color: #6c757d; margin-top: 0.5rem;">Application #{{ application[0] }}</p>
+        </div>
+        <button onclick="history.back()" class="btn btn-outline">← Back</button>
+    </div>
+
+    <!-- Project Information -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">🚀 Project Information</h3>
+        </div>
+        
+        <div style="margin-top: 1rem;">
+            <p><strong>Project Title:</strong> {{ application[5] }}</p>
+            <p><strong>Company:</strong> {{ application[7] }}</p>
+            
+            <div style="margin-top: 1rem;">
+                <strong>Project Description:</strong>
+                <p style="margin-top: 0.5rem; color: #666;">{{ application[6] }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Information -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">👥 Team Information</h3>
+        </div>
+        
+        <p style="margin-top: 1rem;"><strong>Team Name:</strong> {{ application[3] }}</p>
+        
+        <div style="margin-top: 1rem;">
+            <strong>Team Members:</strong>
+            <table style="margin-top: 0.5rem; width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in team_members %}
+                    <tr>
+                        <td>{{ member[1] }}</td>
+                        <td>{{ member[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Team Statement -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📝 Team Statement</h3>
+            <span class="project-status 
+                {% if 'Approved' in application[2] %}status-approved
+                {% elif 'Pending' in application[2] %}status-pending
+                {% elif 'Rejected' in application[2] %}status-rejected
+                {% endif %}">
+                {{ application[2] }}
+            </span>
+        </div>
+        
+        <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+            <p style="white-space: pre-wrap;">{{ application[1] }}</p>
+        </div>
+    </div>
+
+    <!-- Action Buttons (for Faculty/Industry) -->
+    {% if session.get('role') in ['Faculty', 'Industry'] and application[2] != 'Approved' and application[2] != 'Rejected' %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Decision</h3>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <form action="{{ url_for('application_bp.update_application_status') }}" method="POST" style="flex: 1;">
+                <input type="hidden" name="application_id" value="{{ application[0] }}">
+                <button type="submit" name="action" value="Approve" class="btn btn-success btn-full">
+                    ✓ Approve Application
+                </button>
+            </form>
+            
+            <form action="{{ url_for('application_bp.update_application_status') }}" method="POST" style="flex: 1;">
+                <input type="hidden" name="application_id" value="{{ application[0] }}">
+                <button type="submit" name="action" value="Reject" class="btn btn-danger btn-full">
+                    ✗ Reject Application
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
