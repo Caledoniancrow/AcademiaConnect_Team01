@@ -1,144 +1,177 @@
 {% extends "base.html" %}
 
+{% block title %}Dashboard - Academia Connect{% endblock %}
+
 {% block content %}
-        <div id="dashboard" class="page-content">
-            <div class="dashboard-header">
-                <h1>Welcome back, Student!</h1>
-                <p>Here's what's happening with your projects</p>
+<div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h1>
+                {% if role == 'Student' %}Student Dashboard
+                {% elif role == 'Faculty' %}Faculty Dashboard
+                {% elif role == 'Industry' %}Industry Dashboard
+                {% elif role == 'Admin' %}Admin Dashboard
+                {% else %}Dashboard
+                {% endif %}
+            </h1>
+            <p style="color: #6c757d; margin-top: 0.5rem;">
+                Welcome back, {{ session.get('username') }}!
+            </p>
+        </div>
+        
+        {% if role == 'Industry' %}
+        <a href="#create-project" class="btn btn-primary">+ New Project</a>
+        {% elif role == 'Student' %}
+        <a href="{{ url_for('application_bp.create_team') }}" class="btn btn-primary">+ Create Team</a>
+        {% endif %}
+    </div>
+
+    <!-- INDUSTRY VIEW: Post New Project Form -->
+    {% if role == 'Industry' %}
+    <div class="card" id="create-project">
+        <div class="card-header">
+            <h3 class="card-title">🚀 Post a New Project</h3>
+            <p class="card-subtitle">Share your project idea with the academic community</p>
+        </div>
+        <form action="{{ url_for('main.create_project') }}" method="POST">
+            <div class="form-group">
+                <label for="title">Project Title</label>
+                <input 
+                    type="text" 
+                    id="title"
+                    name="title" 
+                    class="form-control"
+                    placeholder="e.g., AI-Powered Customer Service Platform"
+                    required
+                >
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(102, 126, 234, 0.1); color: var(--primary);">📁</div>
-                    </div>
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">Active Projects</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(67, 233, 123, 0.1); color: var(--success);">✓</div>
-                    </div>
-                    <div class="stat-value">12</div>
-                    <div class="stat-label">Completed Milestones</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(255, 161, 23, 0.1); color: var(--warning);">⏱</div>
-                    </div>
-                    <div class="stat-value">5</div>
-                    <div class="stat-label">Pending Tasks</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(79, 172, 254, 0.1); color: var(--info);">👥</div>
-                    </div>
-                    <div class="stat-value">4</div>
-                    <div class="stat-label">Team Members</div>
-                </div>
+            <div class="form-group">
+                <label for="description">Project Description</label>
+                <textarea 
+                    id="description"
+                    name="description" 
+                    class="form-control"
+                    placeholder="Describe the project goals, requirements, and expected deliverables..."
+                    required
+                ></textarea>
             </div>
 
-            <div class="table-container">
-                <h2 style="margin-bottom: 1rem; color: var(--dark);">My Applications</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Project</th>
-                            <th>Team</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>AI Healthcare Platform</td>
-                            <td>Tech Innovators</td>
-                            <td><span class="status-badge open">Pending Faculty</span></td>
-                            <td>Dec 15, 2024</td>
-                            <td><button class="btn btn-primary btn-small">View</button></td>
-                        </tr>
-                        <tr>
-                            <td>Smart City IoT Network</td>
-                            <td>Code Wizards</td>
-                            <td><span class="status-badge completed">Approved</span></td>
-                            <td>Dec 10, 2024</td>
-                            <td><button class="btn btn-primary btn-small">View</button></td>
-                        </tr>
-                        <tr>
-                            <td>E-Commerce Analytics</td>
-                            <td>Data Minds</td>
-                            <td><span class="status-badge in-progress">In Progress</span></td>
-                            <td>Dec 18, 2024</td>
-                            <td><button class="btn btn-primary btn-small">View</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <button type="submit" class="btn btn-primary">Submit Proposal</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- PROJECT LIST (All Roles) -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                {% if role == 'Industry' %}Your Posted Projects
+                {% elif role == 'Student' %}Available Projects
+                {% elif role == 'Faculty' %}All Projects
+                {% else %}Projects
+                {% endif %}
+            </h3>
         </div>
 
-        <!-- PROJECTS PAGE -->
-        <div id="projects" class="page-content">
-            <div class="page-header">
-                <h1>Available Projects</h1>
-                <button class="btn btn-primary">Filter Projects</button>
+        {% if projects %}
+        <div class="grid grid-2">
+            {% for project in projects %}
+            <div class="project-card">
+                <div class="project-header">
+                    <h4 class="project-title">{{ project[1] }}</h4>
+                    <span class="project-status status-{{ project[3]|lower }}">
+                        {{ project[3] }}
+                    </span>
+                </div>
+
+                <div class="project-company">
+                    <span>🏢</span>
+                    <strong>{{ project[4] }}</strong>
+                </div>
+
+                <p class="project-description">{{ project[2][:150] }}{% if project[2]|length > 150 %}...{% endif %}</p>
+
+                <!-- STUDENT-SPECIFIC: Application Form -->
+                {% if role == 'Student' and project[3] == 'Approved' %}
+                <div class="project-actions">
+                    <form action="{{ url_for('application_bp.apply_to_project') }}" method="POST">
+                        <input type="hidden" name="project_id" value="{{ project[0] }}">
+                        
+                        <div class="form-group">
+                            <label for="team_id_{{ project[0] }}">Your Team ID</label>
+                            <input 
+                                type="number" 
+                                id="team_id_{{ project[0] }}"
+                                name="team_id" 
+                                class="form-control"
+                                placeholder="Enter your team ID"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="faculty_id_{{ project[0] }}">Faculty Supervisor ID</label>
+                            <input 
+                                type="number" 
+                                id="faculty_id_{{ project[0] }}"
+                                name="faculty_id" 
+                                class="form-control"
+                                placeholder="Enter faculty ID"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="proposal_{{ project[0] }}">Why is your team a good fit?</label>
+                            <textarea 
+                                id="proposal_{{ project[0] }}"
+                                name="proposal" 
+                                class="form-control"
+                                placeholder="Explain your team's qualifications..."
+                                required
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-full">Apply to Project</button>
+                    </form>
+                </div>
+                {% endif %}
+
+                <!-- FACULTY/INDUSTRY: View Only -->
+                {% if role in ['Faculty', 'Industry'] %}
+                <div class="project-actions">
+                    <button class="btn btn-outline btn-full">View Details</button>
+                </div>
+                {% endif %}
             </div>
-
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>AI Healthcare Platform</h3>
-                        <span class="status-badge open">Open</span>
-                    </div>
-                    <p class="project-company">🏢 MedTech Corp</p>
-                    <p class="project-description">Develop an AI-powered patient diagnosis system using machine learning algorithms to improve healthcare outcomes.</p>
-                    <div class="project-footer">
-                        <span class="project-funding">💰 $5,000</span>
-                        <button class="btn btn-primary btn-small">Apply Now</button>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>Smart City IoT Network</h3>
-                        <span class="status-badge open">Open</span>
-                    </div>
-                    <p class="project-company">🏢 UrbanTech</p>
-                    <p class="project-description">Build IoT infrastructure for urban management including traffic monitoring and environmental sensors.</p>
-                    <div class="project-footer">
-                        <span class="project-funding">💰 $7,000</span>
-                        <button class="btn btn-primary btn-small">Apply Now</button>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>E-Commerce Analytics</h3>
-                        <span class="status-badge in-progress">In Progress</span>
-                    </div>
-                    <p class="project-company">🏢 DataFlow Inc</p>
-                    <p class="project-description">Create real-time analytics dashboard for e-commerce platforms with predictive insights.</p>
-                    <div class="project-footer">
-                        <span class="project-funding">💰 $4,500</span>
-                        <button class="btn btn-primary btn-small">View Details</button>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>Blockchain Supply Chain</h3>
-                        <span class="status-badge open">Open</span>
-                    </div>
-                    <p class="project-company">🏢 ChainLogix</p>
-                    <p class="project-description">Implement blockchain-based tracking system for supply chain transparency and security.</p>
-                    <div class="project-footer">
-                        <span class="project-funding">💰 $8,000</span>
-                        <button class="btn btn-primary btn-small">Apply Now</button>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
+        {% else %}
+        <p style="text-align: center; color: #6c757d; padding: 2rem;">
+            No projects available at the moment.
+        </p>
+        {% endif %}
+    </div>
+
+    <!-- ADMIN VIEW: Additional Management Options -->
+    {% if role == 'Admin' %}
+    <div class="grid grid-2">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">👥 User Management</h3>
+            </div>
+            <a href="#" class="btn btn-primary btn-full">Manage Users</a>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">✅ Pending Approvals</h3>
+            </div>
+            <a href="#" class="btn btn-primary btn-full">Review Pending Projects</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
