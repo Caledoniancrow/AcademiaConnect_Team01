@@ -1,19 +1,77 @@
 {% extends "base.html" %}
+{% block content %}        
+        
+        <div id="login" class="page-content">
+            <div class="auth-container">
+                <div class="auth-box">
+                    <div class="auth-header">
+                        <div class="auth-icon">🔐</div>
+                        <h2>Welcome Back</h2>
+                        <p>Log in to continue your journey</p>
+                    </div>
 
-{% block content %}
-<div class="auth-box">
-    <h2>Login</h2>
-    <form method="POST" action="{{ url_for('auth.login') }}">
-        <div class="form-group">
-            <label>Email:</label>
-            <input type="email" name="email" required>
+                    <form class="auth-form">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" placeholder="your.email@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" placeholder="••••••••" required>
+                        </div>name: Academia Connect CI
+
+                        on:
+                        push:
+                        branches: [ "main" ]
+                        pull_request:
+                        branches: [ "main" ]
+                        workflow_dispatch:
+
+                        jobs:
+                        build:
+                        runs-on: ubuntu-latest
+
+                        steps:
+
+                        - uses: actions/checkout@v3
+
+                        - name: Set up Python 3.9
+                        uses: actions/setup-python@v3
+                        with:
+                        python-version: "3.9"
+
+                        - name: Install dependencies
+                        run: |
+                        python -m pip install --upgrade pip
+                        pip install flask pyodbc
+
+                        - name: Run Syntax Check (Compile)
+                        run: |
+                        python -m compileall app/
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="link">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full" onclick="event.preventDefault(); showPage('dashboard');">Log In</button>
+                    </form>
+
+                    <div class="auth-divider">
+                        <span>or connect with</span>
+                    </div>
+
+                    <div class="social-buttons">
+                        <button class="btn-social">Facebook</button>
+                        <button class="btn-social">Google</button>
+                        <button class="btn-social">GitHub</button>
+                    </div>
+
+                    <p class="auth-footer">
+                        Don't have an account? <a href="#" onclick="showPage('register')" class="link">Sign Up</a>
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Password:</label>
-            <input type="password" name="password" required>
-        </div>
-        <button type="submit" class="btn">Login</button>
-    </form>
-    <p>New here? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
-</div>
 {% endblock %}

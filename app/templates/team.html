@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}        
+        
+        
+        <div id="teams" class="page-content">
+            <div class="page-header">
+                <h1>Teams</h1>
+                <button class="btn btn-primary" onclick="showPage('create-team')">+ Create Team</button>
+            </div>
+
+            <div class="teams-grid">
+                <div class="team-card">
+                    <div class="team-icon">👥</div>
+                    <h3>Tech Innovators</h3>
+                    <p class="team-leader">Leader: Sarah Johnson</p>
+                    <p class="team-members">4 Members</p>
+                    <div class="team-project">
+                        <span>📁 AI Healthcare Platform</span>
+                    </div>
+                    <button class="btn btn-outline btn-full">View Team</button>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-icon">👥</div>
+                    <h3>Code Wizards</h3>
+                    <p class="team-leader">Leader: Mike Chen</p>
+                    <p class="team-members">3 Members</p>
+                    <div class="team-project">
+                        <span>📁 Smart City IoT Network</span>
+                    </div>
+                    <button class="btn btn-outline btn-full">View Team</button>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-icon">👥</div>
+                    <h3>Data Minds</h3>
+                    <p class="team-leader">Leader: Emma Davis</p>
+                    <p class="team-members">5 Members</p>
+                    <div class="team-project">
+                        <span>📁 E-Commerce Analytics</span>
+                    </div>
+                    <button class="btn btn-outline btn-full">View Team</button>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-icon">➕</div>
+                    <h3>Create Your Team</h3>
+                    <p class="team-leader">Start your journey</p>
+                    <p class="team-members">Be a leader</p>
+                    <div class="team-project">
+                        <span>🚀 Join the Innovation</span>
+                    </div>
+                    <button class="btn btn-primary btn-full" onclick="showPage('create-team')">Create Team</button>
+                </div>
+            </div>
+        </div>
+{% endblock %}

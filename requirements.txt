@@ -3,4 +3,3 @@ pyodbc
 pytest
 pytest-flask
 pytest-mock
-bcrypt
