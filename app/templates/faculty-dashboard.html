@@ -1,94 +1,66 @@
 {% extends "base.html" %}
 
-{% block content %}        
-        
-<div id="faculty-dashboard" class="page-content">
-            <div class="dashboard-header">
-                <h1>Faculty Dashboard</h1>
-                <p>Review and manage student applications</p>
-            </div>
+{% block title %}Faculty Dashboard - Academia Connect{% endblock %}
 
-            <div class="table-container">
-                <h2 style="margin-bottom: 1rem; color: var(--dark);">Pending Applications</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Team Name</th>
-                            <th>Project</th>
-                            <th>Statement</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Tech Innovators</td>
-                            <td>AI Healthcare Platform</td>
-                            <td>We have strong ML background...</td>
-                            <td>Dec 15, 2024</td>
-                            <td>
-                                <button class="btn btn-primary btn-small" style="margin-right: 0.5rem;">Approve</button>
-                                <button class="btn btn-outline btn-small" style="border-color: var(--danger); color: var(--danger);">Reject</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Code Wizards</td>
-                            <td>Smart City IoT Network</td>
-                            <td>Experience with IoT devices...</td>
-                            <td>Dec 10, 2024</td>
-                            <td>
-                                <button class="btn btn-primary btn-small" style="margin-right: 0.5rem;">Approve</button>
-                                <button class="btn btn-outline btn-small" style="border-color: var(--danger); color: var(--danger);">Reject</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Data Minds</td>
-                            <td>E-Commerce Analytics</td>
-                            <td>Proficient in data visualization...</td>
-                            <td>Dec 18, 2024</td>
-                            <td>
-                                <button class="btn btn-primary btn-small" style="margin-right: 0.5rem;">Approve</button>
-                                <button class="btn btn-outline btn-small" style="border-color: var(--danger); color: var(--danger);">Reject</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="stats-grid" style="margin-top: 2rem;">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(102, 126, 234, 0.1); color: var(--primary);">📋</div>
-                    </div>
-                    <div class="stat-value">8</div>
-                    <div class="stat-label">Total Applications</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(255, 161, 23, 0.1); color: var(--warning);">⏱</div>
-                    </div>
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">Pending Review</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(67, 233, 123, 0.1); color: var(--success);">✓</div>
-                    </div>
-                    <div class="stat-value">5</div>
-                    <div class="stat-label">Approved</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(244, 67, 54, 0.1); color: var(--danger);">✗</div>
-                    </div>
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Rejected</div>
-                </div>
-            </div>
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Faculty Dashboard</h1>
+            <p style="color: #6c757d; margin-top: 0.5rem;">Review and approve student applications</p>
         </div>
-
     </div>
+
+    <div class="table-container">
+        <h3 style="margin-bottom: 1rem; color: var(--primary);">📋 Pending Applications</h3>
+        
+        {% if applications %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Team Name</th>
+                    <th>Project Title</th>
+                    <th>Team Statement</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td><strong>#{{ app[0] }}</strong></td>
+                    <td>{{ app[1] }}</td>
+                    <td>{{ app[2] }}</td>
+                    <td>{{ app[3][:80] }}{% if app[3]|length > 80 %}...{% endif %}</td>
+                    <td>
+                        <span class="project-status status-pending">
+                            {{ app[4] }}
+                        </span>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('application_bp.update_application_status') }}" method="POST" style="display: flex; gap: 0.5rem;">
+                            <input type="hidden" name="application_id" value="{{ app[0] }}">
+                            
+                            <button type="submit" name="action" value="Approve" class="btn btn-success btn-sm">
+                                ✓ Approve
+                            </button>
+                            
+                            <button type="submit" name="action" value="Reject" class="btn btn-danger btn-sm">
+                                ✗ Reject
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div style="text-align: center; padding: 3rem; color: #6c757d;">
+            <p style="font-size: 1.2rem;">No pending applications at this time.</p>
+            <p>Applications from students will appear here for your review.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

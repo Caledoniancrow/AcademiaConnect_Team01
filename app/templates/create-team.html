@@ -1,13 +1,37 @@
 {% extends "base.html" %}
 
-{% block content %}        
-        
-        <div id="create-team" class="page-content">
-            <div class="auth-container">
-                <div class="auth-box">
-                    <div class="auth-header">
-                        <div class="auth-icon">👥</div>
-                        <h2>Create Your Team</h2>
-                        <p>Start your collaborative journey</p>
-                    </div>
+{% block title %}Create Team - Academia Connect{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box">
+        <div class="auth-header">
+            <h2>Create a Team</h2>
+            <p>You will become the Team Leader</p>
+        </div>
+
+        <form action="{{ url_for('application_bp.create_team') }}" method="POST">
+            <div class="form-group">
+                <label for="team_name">Team Name</label>
+                <input 
+                    type="text" 
+                    id="team_name"
+                    name="team_name" 
+                    class="form-control"
+                    placeholder="e.g., Code Wizards, Tech Innovators"
+                    required
+                >
+                <small style="color: #6c757d; display: block; margin-top: 0.5rem;">
+                    Choose a unique name that represents your team
+                </small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">Create Team</button>
+        </form>
+
+        <div class="auth-footer">
+            <p><a href="{{ url_for('main.dashboard') }}">← Back to Dashboard</a></p>
+        </div>
+    </div>
+</div>
 {% endblock %}
