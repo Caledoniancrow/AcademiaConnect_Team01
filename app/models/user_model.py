@@ -6,19 +6,28 @@ class UserDAO:
     @staticmethod
     def create_user(username, email, password, role):
         conn = get_db()
+        
+        # Add this check to handle None connection
+        if conn is None:
+            print("[ERROR] Database connection is None")
+            return False
+        
         cursor = conn.cursor()
         try:
             password_hash = hashlib.sha256(password.encode()).hexdigest()
             query = """
-                INSERT INTO Users (Use rname, Email, PasswordHash, Role)
+                INSERT INTO Users (Username, Email, PasswordHash, Role)
                 VALUES (?, ?, ?, ?)
             """
             cursor.execute(query, (username, email, password_hash, role))
-
+            conn.commit()  # Add explicit commit
             return True
         except Exception as e:
             print(f"[DB Error] create_user(): {e}")
+            conn.rollback()  # Add rollback on error
             return False
+        finally:
+            cursor.close()  # Clean up cursor
 
     @staticmethod
     def get_user_by_email(email):

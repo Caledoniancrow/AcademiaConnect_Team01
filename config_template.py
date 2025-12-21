@@ -8,7 +8,7 @@ class Config:
     # INSTRUCTIONS: 
     # Replace 'YOUR_SERVER_NAME' with your specific SQL Server instance.
     # Example: 'DESKTOP-558\SQLEXPRESS' or 'localhost'
-    SQL_SERVER = 'YOUR_SERVER_NAME_HERE' 
+    SQL_SERVER = 'localhost' 
     SQL_DATABASE = 'AcademiaConnectDB'
     #localhost
     
