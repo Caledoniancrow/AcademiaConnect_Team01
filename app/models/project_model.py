@@ -53,7 +53,8 @@ class ProjectDAO:
                     p.Title,
                     p.Description,
                     p.Status,
-                    u.Username AS CompanyName
+                    u.Username AS CompanyName,
+                    p.IndustryID 
                 FROM Projects p
                 JOIN Users u ON p.IndustryID = u.UserID
                 WHERE p.ProjectID = ?

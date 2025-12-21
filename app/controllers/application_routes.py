@@ -199,7 +199,8 @@ def faculty_dashboard():
     faculty_id = session.get('user_id')
     applications = ApplicationDAO.get_applications_for_faculty(faculty_id)
     
-    return render_template('faculty_dashboard.html', applications=applications)
+    # CHANGE THIS LINE (use a hyphen, not an underscore)
+    return render_template('faculty-dashboard.html', applications=applications)
 
 
 @application_bp.route('/applications/industry')
