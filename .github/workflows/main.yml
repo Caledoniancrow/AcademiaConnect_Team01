@@ -1,0 +1,50 @@
+name: Academia Connect CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    # 1. Setup Python
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.9"
+        
+    # 2. FIX: Install System Deps (REQUIRED for pyodbc on Linux)
+    # Without this, 'pip install pyodbc' will crash on the server
+    - name: Install Linux ODBC Drivers
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y unixodbc unixodbc-dev
+
+    # 3. Install Python Dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flask pyodbc pytest
+        
+    # 4. Run Syntax Check (Your original step)
+    - name: Run Syntax Check (Compile)
+      run: python -m compileall app/
+
+    # 5. NEW: Run Unit Tests (The "Autonomous Testing")
+    # This requires you to have the 'tests/' folder I gave you earlier
+    - name: Run Unit Tests
+      run: |
+        export PYTHONPATH=$PYTHONPATH:.
+        pytest tests/
+
+    # 6. NEW: Verify Docker Build
+    # This proves your Dockerfile is correct without actually deploying
+    - name: Build Docker Image
+      run: docker build . --file Dockerfile --tag academia-connect:latest
