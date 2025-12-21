@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from app.db import get_db
-import bcrypt
+import hashlib
 
 admin_bp = Blueprint('admin_bp', __name__)
 
@@ -58,7 +58,7 @@ def create_user():
             return redirect(url_for('admin_bp.create_user'))
 
         # Hash Password
-        hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        hashed_pw = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
         conn = get_db()
         cursor = conn.cursor()
